@@ -1,14 +1,16 @@
 "use client"
 import React, { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 import { Menu, ShieldCheck, LogOut, User as UserIcon } from 'lucide-react'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { createClient } from '@/utils/supabase/client'
 
 export default function Navbar() {
   const [email, setEmail] = useState<string | null>(null)
+  const [open, setOpen] = useState(false)
   const router = useRouter()
+  const pathname = usePathname()
   const supabase = useMemo(() => createClient(), [])
 
   useEffect(() => {
@@ -22,6 +24,11 @@ export default function Navbar() {
 
     return () => listener.subscription.unsubscribe()
   }, [supabase])
+
+  // AUTO-CLOSE the mobile menu whenever the page changes
+  useEffect(() => {
+    setOpen(false)
+  }, [pathname])
 
   async function handleLogout() {
     await supabase.auth.signOut()
@@ -79,7 +86,7 @@ export default function Navbar() {
         </div>
 
         <div className="md:hidden">
-          <Sheet>
+          <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger className="inline-flex items-center justify-center rounded-md h-10 w-10 text-white hover:bg-white/10 focus:outline-none">
               <Menu className="h-6 w-6" />
             </SheetTrigger>
