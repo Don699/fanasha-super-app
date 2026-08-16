@@ -19,7 +19,7 @@ export default function DashboardPage() {
         router.push('/login')
         return
       }
-      setEmail(session.user.email)
+      setEmail(session.user.email ?? null)
       const [o, v, a, b] = await Promise.all([
         supabase.from('pawn_offers').select('id', { count: 'exact', head: true }),
         supabase.from('visit_requests').select('id', { count: 'exact', head: true }),
