@@ -2,7 +2,6 @@
 import React from 'react'
 import Link from 'next/link'
 import { Menu, ShieldCheck } from 'lucide-react'
-import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 
 export default function Navbar() {
@@ -26,15 +25,16 @@ export default function Navbar() {
         </div>
 
         <div className="hidden md:flex items-center gap-4">
-          <Button variant="ghost" className="text-slate-300 hover:text-white hover:bg-white/5">Login</Button>
-          <Button className="bg-amber-500 hover:bg-amber-400 text-slate-950 font-semibold shadow-lg shadow-amber-500/20">
+          <Link href="/login" className="inline-flex items-center justify-center rounded-md text-sm font-medium text-slate-300 hover:text-white hover:bg-white/5 h-10 px-4 transition-colors">
+            Login
+          </Link>
+          <Link href="/pawn-shop" className="inline-flex items-center justify-center rounded-md text-sm font-semibold bg-amber-500 hover:bg-amber-400 text-slate-950 h-10 px-5 shadow-lg shadow-amber-500/20 transition-colors">
             Get Valuation
-          </Button>
+          </Link>
         </div>
 
         <div className="md:hidden">
           <Sheet>
-            {/* CRITICAL FIX: NO 'asChild' HERE */}
             <SheetTrigger className="inline-flex items-center justify-center rounded-md h-10 w-10 text-white hover:bg-white/10 focus:outline-none">
               <Menu className="h-6 w-6" />
             </SheetTrigger>
@@ -44,9 +44,9 @@ export default function Navbar() {
                 <Link href="/pawn-shop" className="text-lg font-medium hover:text-amber-400">Instant Cash</Link>
                 <Link href="/work-and-pay" className="text-lg font-medium hover:text-amber-400">Work & Pay</Link>
                 <Link href="/construction" className="text-lg font-medium hover:text-amber-400">Construction</Link>
-                <Button className="bg-amber-500 hover:bg-amber-400 text-slate-950 font-semibold w-full mt-4">
-                  Get Valuation
-                </Button>
+                <Link href="/login" className="inline-flex items-center justify-center rounded-md text-base font-semibold bg-amber-500 hover:bg-amber-400 text-slate-950 h-11 px-5 shadow-lg shadow-amber-500/20 transition-colors mt-4">
+                  Login / Sign Up
+                </Link>
               </div>
             </SheetContent>
           </Sheet>
