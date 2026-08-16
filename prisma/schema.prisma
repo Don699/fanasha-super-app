@@ -1,13 +1,67 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
+// prisma/schema.prisma
 generator client {
-  provider = "prisma-client"
-  output   = "../src/generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum UserRole {
+  ADMIN
+  CUSTOMER
+  DRIVER 
+  AGENT  
+}
+
+enum PropertyStatus {
+  AVAILABLE
+  SOLD
+  LITIGATION_PENDING
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  phone     String?  @unique 
+  role      UserRole @default(CUSTOMER)
+  createdAt DateTime @default(now())
+  
+  pawnOffers PawnOffer[]
+  loans      Loan[]
+}
+
+model Property {
+  id           String         @id @default(cuid())
+  title        String
+  type         String         // "Land", "Apartment", "Commercial"
+  price        Float
+  location     String
+  status       PropertyStatus @default(AVAILABLE)
+  mediaUrls    String[] 
+  createdAt    DateTime       @default(now())
+}
+
+model PawnOffer {
+  id             String   @id @default(cuid())
+  userId         String
+  user           User     @relation(fields: [userId], references: [id])
+  itemType       String   // "Gold", "Watch", "Phone"
+  photos         String[] 
+  estimatedValue Float?
+  status         String   @default("PENDING_VALUATION")
+  createdAt      DateTime @default(now())
+}
+
+model Loan { 
+  id              String   @id @default(cuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id])
+  assetType       String   // "Motorbike", "Car"
+  principalAmount Float
+  totalDue        Float
+  paidAmount      Float    @default(0)
+  status          String   @default("PENDING")
 }
